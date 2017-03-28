@@ -253,17 +253,25 @@ function Invoke-HostRecon{
                 {
                 Write-Output ("Possible McAfee AV process " + $ps.ProcessName + " is running.")
                 }
-            if ($ps.ProcessName -like "*windefend*")
+            if (($ps.ProcessName -like "*windefend*") -or ($ps.ProcessName -like "*MSASCui*") -or ($ps.ProcessName -like "*msmpeng*") -or ($ps.ProcessName -like "*msmpsvc*"))
                 {
                 Write-Output ("Possible Windows Defender AV process " + $ps.ProcessName + " is running.")
-                }
-            if ($ps.ProcessName -like "*symantec antivirus*")
-                {
-                Write-Output ("Possible Symantec AV process " + $ps.ProcessName + " is running.")
                 }
             if ($ps.ProcessName -like "*WRSA*")
                 {
                 Write-Output ("Possible WebRoot AV process " + $ps.ProcessName + " is running.")
+                }
+            if ($ps.ProcessName -like "*savservice*")
+                {
+                Write-Output ("Possible Sophos AV process " + $ps.ProcessName + " is running.")
+                }
+            if (($ps.ProcessName -like "*TMCCSF*") -or ($ps.ProcessName -like "*TmListen*") -or ($ps.ProcessName -like "*NTRtScan*"))
+                {
+                Write-Output ("Possible Trend Micro AV process " + $ps.ProcessName + " is running.")
+                }
+            if (($ps.ProcessName -like "*symantec antivirus*") -or ($ps.ProcessName -like "*SymCorpUI*") -or ($ps.ProcessName -like "*ccSvcHst*") -or ($ps.ProcessName -like "*SMC*")  -or ($ps.ProcessName -like "*Rtvscan*"))
+                {
+                Write-Output ("Possible Symantec AV process " + $ps.ProcessName + " is running.")
                 }
             #AppWhitelisting
             if ($ps.ProcessName -like "*Parity*")
@@ -282,12 +290,17 @@ function Invoke-HostRecon{
             if ($ps.ProcessName -like "*Triumfant*")
                 {
                 Write-Output ("Possible Triumfant behavioral analysis process " + $ps.ProcessName + " is running.")
-                }  
+                }
             #Intrusion Detection
             if ($ps.ProcessName -like "*ossec*")
                 {
                 Write-Output ("Possible OSSEC intrusion detection process " + $ps.ProcessName + " is running.")
-                }               
+                } 
+            #Firewall
+            if ($ps.ProcessName -like "*TmPfw*")
+                {
+                Write-Output ("Possible Trend Micro firewall process " + $ps.ProcessName + " is running.")
+                }                           
             }
     Write-Output "`n"
 
