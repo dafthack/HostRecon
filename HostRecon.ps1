@@ -20,6 +20,10 @@ function Invoke-HostRecon{
 
     If this flag is added an outbound portscan will be initiated from the target system to allports.exposed. The top 50 ports as specified by the Nmap project will be scanned. This is useful in determining any egress filtering in use.
     
+    .PARAMETER TopPorts
+
+    This flag specifies the number of "top ports" to be scanned outbound from the system. Valid entries are 1-128. Default is 50.
+
     .Example
 
     C:\PS> Invoke-HostRecon
@@ -27,6 +31,14 @@ function Invoke-HostRecon{
     Description
     -----------
     This command will run a number of checks on the local system including the retrieval of local system information (netstat, common security products, scheduled tasks, local admins group, LAPS, etc), and domain information (Domain Admins group, DC's, password policy).
+
+    .Example
+
+    C:\PS> Invoke-HostRecon -Portscan -TopPorts 128
+
+    Description
+    -----------
+    This command will run a number of checks on the local system including the retrieval of local system information (netstat, common security products, scheduled tasks, local admins group, LAPS, etc), and domain information (Domain Admins group, DC's, password policy). Additionally, it will perform an outbound portscan on the top 128 ports to allports.exposed to assist in determining any ports that might be allowed outbound for C2 communications.
 
     #>
 
@@ -313,7 +325,8 @@ function Invoke-HostRecon{
             {
                 $DomainContext = New-Object System.DirectoryServices.ActiveDirectory.DirectoryContext("domain",$domain)
                 $DomainObject =[System.DirectoryServices.ActiveDirectory.Domain]::GetDomain($DomainContext)
-                $DomainObject.DomainControllers
+                $DCS = $DomainObject.DomainControllers.Name | Format-List | Out-String
+                $DCS
             
             }
             catch 
@@ -355,8 +368,7 @@ function TCP-PortScan {
 <#
 .SYNOPSIS
 
-Perform a full TCP connection scan to the destination hostname, or to
-'letmeoutofyour.net' if that destination is not supplied.
+Perform a full TCP connection scan to the destination hostname, or to 'allports.exposed' if that destination is not supplied.
 
 Author: Joff Thyer, April 2014
 
@@ -369,7 +381,7 @@ that appear in this file.  If the top X number of popular ports is not the desir
 behavior, you can specify a minimum and maximum port number within which a range of
 ports will be scanned.  By default, a random delay between 50 and 200 milliseconds
 is added in order to assist in avoiding detection.  Also by default, if the hostname
-is not specified then 'letmeoutofyour.net' will be used as a default.   The 'letmeoutofyour.net'
+is not specified then 'allports.exposed' will be used as a default.   The 'allports.exposed'
 site responds to all TCP ports will the text of 'woot woot' if an HTTP request is sent,
 but more to the point, all ports are considered open.
 
@@ -377,7 +389,7 @@ but more to the point, all ports are considered open.
 
 If provided, the hostname will be looked up and the resulting IP address used
 as the IP address to be scanned.  If not provided, then the default hostname
-of 'letmeoutofyour.net' will be used.
+of 'allports.exposed' will be used.
 
 .PARAMETER MinPort
 
