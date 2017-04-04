@@ -273,6 +273,14 @@ function Invoke-HostRecon{
                 {
                 Write-Output ("Possible Symantec AV process " + $ps.ProcessName + " is running.")
                 }
+            if ($ps.ProcessName -like "*mbae*")
+                {
+                Write-Output ("Possible MalwareBytes Anti-Exploit process " + $ps.ProcessName + " is running.")
+                }
+            if ($ps.ProcessName -like "*mbam*")
+                {
+                Write-Output ("Possible MalwareBytes Anti-Malware process " + $ps.ProcessName + " is running.")
+                }
             #AppWhitelisting
             if ($ps.ProcessName -like "*Parity*")
                 {
@@ -507,5 +515,4 @@ Disable the random delay between connection attempts.
     $report | where {$_.Status -eq "open"} | Sort-Object Port | Format-Table $columns -AutoSize
     Write-Output "[*] $tcp_count out of $total scanned ports are open!"
 }
-
 
