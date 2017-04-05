@@ -346,8 +346,11 @@ function Invoke-HostRecon{
             {
                 $DomainContext = New-Object System.DirectoryServices.ActiveDirectory.DirectoryContext("domain",$domain)
                 $DomainObject =[System.DirectoryServices.ActiveDirectory.Domain]::GetDomain($DomainContext)
-                $DCS = $DomainObject.DomainControllers.Name | Format-List | Out-String
-                $DCS
+                $DCS = $DomainObject.DomainControllers
+                foreach ($dc in $DCS)
+                {
+                    $dc.Name
+                }
             
             }
             catch 
