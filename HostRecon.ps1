@@ -87,7 +87,7 @@ function Invoke-HostRecon{
     #Local Admins group
 
     Write-Output "[*] Local Admins of this system"
-    $Admins = Get-WmiObject win32_groupuser | Where-Object { $_.GroupComponent -match 'administrators' } | ForEach-Object {[wmi]$_.PartComponent } | Select-Object Caption,SID | format-table -Wrap | Out-String
+    $Admins = Get-WmiObject win32_groupuser | Where-Object { $_.GroupComponent -match 'administrators' -and ($_.GroupComponent -match "Domain=`"$env:COMPUTERNAME`"")} | ForEach-Object {[wmi]$_.PartComponent } | Select-Object Caption,SID | format-table -Wrap | Out-String
     $Admins
     Write-Output "`n"
 
