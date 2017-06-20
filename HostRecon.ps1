@@ -244,6 +244,21 @@ function Invoke-HostRecon{
 
     #Checking for common security products
 
+    Write-Output "[*] Checking for Sysinternals Sysmon"
+    try
+        {
+        $sysmondrv = Get-ChildItem "$env:SystemRoot\sysmondrv.sys" -ErrorAction Stop
+        if ($sysmondrv)
+            {
+            Write-Output "The Sysmon driver $($sysmondrv.VersionInfo.FileVersion) (sysmondrv.sys) was found. System activity may be monitored."
+            }
+        }
+    catch
+        {
+        Write-Output "The Sysmon driver was not found."
+        }
+    Write-Output "`n"
+
     Write-Output "[*] Checking for common security product processes"
     $processnames = $processes | Select-Object ProcessName
     Foreach ($ps in $processnames)
