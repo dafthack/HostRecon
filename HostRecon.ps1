@@ -221,7 +221,7 @@ function Invoke-HostRecon{
     Write-Output "[*] Checking for Local Admin Password Solution (LAPS)"
     try
         {
-        $lapsfile = Get-ChildItem 'C:\Program Files\LAPS\CSE\Admpwd.dll' -ErrorAction Stop
+        $lapsfile = Get-ChildItem "$env:ProgramFiles\LAPS\CSE\Admpwd.dll" -ErrorAction Stop
         if ($lapsfile)
             {
             Write-Output "The LAPS DLL (Admpwd.dll) was found. Local Admin password randomization may be in use."
