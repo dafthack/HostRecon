@@ -314,6 +314,10 @@ function Invoke-HostRecon{
                 {
                 Write-Output ("Possible Triumfant behavioral analysis process " + $ps.ProcessName + " is running.")
                 }
+            if ($ps.ProcessName -like "CSFalcon")
+                {
+                Write-Output ("Possible CrowdStrike Falcon EDR process " + $ps.ProcessName + " is running.")
+                }
             #Intrusion Detection
             if ($ps.ProcessName -like "*ossec*")
                 {
@@ -323,7 +327,16 @@ function Invoke-HostRecon{
             if ($ps.ProcessName -like "*TmPfw*")
                 {
                 Write-Output ("Possible Trend Micro firewall process " + $ps.ProcessName + " is running.")
-                }                           
+                } 
+            #DLP
+            if (($ps.ProcessName -like "dgagent") -or ($ps.ProcessName -like "DgService") -or ($ps.ProcessName -like "DgScan"))
+                {
+                Write-Output ("Possible Verdasys Digital Guardian DLP process " + $ps.ProcessName + " is running.")
+                }   
+            if ($ps.ProcessName -like "kvoop")
+                {
+                Write-Output ("Possible Unknown DLP process " + $ps.ProcessName + " is running.")
+                }                       
             }
     Write-Output "`n"
 
@@ -533,4 +546,3 @@ Disable the random delay between connection attempts.
     $report | where {$_.Status -eq "open"} | Sort-Object Port | Format-Table $columns -AutoSize
     Write-Output "[*] $tcp_count out of $total scanned ports are open!"
 }
-
