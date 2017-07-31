@@ -2,6 +2,7 @@
 Invoke-HostRecon runs a number of checks on a system to help provide situational awareness to a penetration tester during the reconnaissance phase of an engagement. It gathers information about the local system, users, and domain information. It does not use any 'net', 'ipconfig', 'whoami', 'netstat', or other system commands to help avoid detection. 
 
 For more info check out this blog post: http://www.blackhillsinfosec.com/?p=5824
+HostRecon Demo Video: https://www.youtube.com/watch?v=H4wzhmaBgM0
 
 ## Situational Awareness
 ### Invoke-HostRecon gets the following information from the system without running system tools like 'net', 'ipconfig', etc.
@@ -24,6 +25,7 @@ Local Admin Password Solution (LAPS)
 Domain Password Policy
 Domain Admins Group Members
 Domain Controllers
+Check for Sysinternals Sysmon
 Checks for Common Security Products
 ```
 ## Common Security Product Detection
