@@ -50,7 +50,13 @@ function Invoke-HostRecon{
 
         [Parameter(Position = 1, Mandatory = $false)]
         [string]
-        $TopPorts = "50"
+        $TopPorts = "50",
+
+        [Parameter(Position = 2, Mandatory = $false)]
+        [switch]
+        $DisableDomainChecks = $false,
+
+        [ValidateRange(1,65535)][String[]]$Portlist = ""
 
     )
 
@@ -292,10 +298,10 @@ function Invoke-HostRecon{
                 {
                 Write-Output ("Possible MalwareBytes Anti-Exploit process " + $ps.ProcessName + " is running.")
                 }
-            if ($ps.ProcessName -like "*mbam*")
-                {
-                Write-Output ("Possible MalwareBytes Anti-Malware process " + $ps.ProcessName + " is running.")
-                }
+            #if ($ps.ProcessName -like "*mbam*")
+               # {
+               # Write-Output ("Possible MalwareBytes Anti-Malware process " + $ps.ProcessName + " is running.")
+               # }
             #AppWhitelisting
             if ($ps.ProcessName -like "*Parity*")
                 {
@@ -340,6 +346,8 @@ function Invoke-HostRecon{
             }
     Write-Output "`n"
 
+    if ($DisableDomainChecks -eq $false)
+    {
     #Domain Password Policy
 
     $domain = "$env:USERDOMAIN"
@@ -407,10 +415,17 @@ function Invoke-HostRecon{
 
             }
        Write-Output "`n"
-
+    }
     If($Portscan)
     {
+    if ($Portlist -ne "")
+    {
+    TCP-PortScan -Portlist $Portlist
+    }
+    else
+    {
     TCP-PortScan -TopPorts $TopPorts
+    }
     }
 
 }
@@ -471,6 +486,7 @@ Disable the random delay between connection attempts.
             [ValidateRange(1,65535)][Int]$MaxPort = 1,
             [ValidateRange(1,128)][Int]$TopPorts = 50,
             [ValidateRange(10,10000)][Int]$Timeout = 400,
+            [ValidateRange(1,65535)][String[]]$Portlist = "",
             [switch]$NoRandomDelay = $false )
 
     $resolved = [System.Net.Dns]::GetHostByName($Hostname)
@@ -496,6 +512,10 @@ Disable the random delay between connection attempts.
     }
     elseif ($MaxPort -lt $MinPort) {
         Throw "Are you out of your mind?  Port range cannot go negative."
+    }
+    elseif($Portlist -ne ""){
+    $ports = $Portlist
+    Write-Host -NoNewline "[*] Scanning $Hostname ($ip), using the portlist provided."
     }
     else {
         $PortDiff = $TopPorts - 1
